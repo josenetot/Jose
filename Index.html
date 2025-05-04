@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Mensagem do Dia</title>
+  <style>
+    body {
+      text-align: center;
+      margin-top: 50px;
+      font-family: 'Arial', sans-serif;
+      background-color: #fff0f5;
+    }
+
+    .heart-button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      animation: pulse 1.5s infinite;
+      font-size: 60px;
+      color: red;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+      100% { transform: scale(1); }
+    }
+
+    #mensagem {
+      font-size: 20px;
+      margin-top: 30px;
+      display: none;
+      animation: fadeIn 1.5s ease-in-out;
+      white-space: pre-wrap;
+      max-width: 90%;
+      margin: 30px auto 0;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    #final {
+      margin-top: 30px;
+      font-size: 24px;
+      color: #d63384;
+      font-weight: bold;
+      display: none;
+      animation: zoomIn 1.5s ease-in-out;
+    }
+
+    @keyframes zoomIn {
+      0% { transform: scale(0.5); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .foto-container {
+      margin-top: 30px;
+      display: inline-block;
+      border: 10px solid #ff69b4;
+      border-radius: 20px;
+      padding: 10px;
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .foto-container img {
+      width: 250px;
+      height: 250px;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+
+    .musica-controls {
+      margin-top: 20px;
+    }
+
+    .musica-controls button {
+      margin: 5px;
+      padding: 8px 15px;
+      border: none;
+      background-color: #ff69b4;
+      color: white;
+      font-weight: bold;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>Bom dia para a Isadora</h1>
+
+  <!-- Foto quadrada com moldura fofa -->
+  <div class="foto-container">
+    <img src="Nossa_Foto.JPG" alt="Foto de vocês">
+  </div>
+
+  <h2>Toque no coração para ver sua mensagem:</h2>
+  <button class="heart-button" onclick="mostrarMensagem()">❤️</button>
+
+  <p id="mensagem"></p>
+  <div id="final"></div>
+
+  <!-- Controles de música -->
+  <div class="musica-controls">
+    <button onclick="trocarMusica(0)">Música 1</button>
+    <button onclick="trocarMusica(1)">Música 2</button>
+  </div>
+
+  <audio id="musica" autoplay loop>
+    <source id="musicaSource" src="https://www.bensound.com/bensound-music/bensound-romantic.mp3" type="audio/mp3">
+  </audio>
+
+  <script>
+    const mensagens = {
+      "05-04": "Bom dia, minha princesa! Que o seu dia seja tão maravilhoso quanto o seu sorriso maravilhoso. queria te diser que você é a minha maior certeza, e que eu nunca vou te deixar! te amo demais meu amor, você é a mulher com quem eu quero construir uma linda familia e ter um casão do caralho, pra mim descobrir lugares novos e me perder todos os dias. Te amo muito, até amanhã.",
+      
+      "05-05": "Seu sorriso ilumina completamente o meu mundo. Ver esse sorriso lindo é uma das coisas mais maravilhosas que existem… ainda mais quando vem acompanhado dessas bochechas gostosas que me deixam até confuso, sem saber o que eu amo mais: o seu sorriso ou as suas bochechas. Mas no fundo, eu sei… eu amo tudo em você.",
+      
+      "05-06": `
+Bom dia, minha chatinha. Último dia dessas mensagens aqui, mas você sabe que meu amor por você não acaba nunca e não tem prazo.
+
+Eu vou usar esse espaço pra te lembrar de uma coisa que eu penso todos os dias: você é a mulher mais linda que eu já vi. Sério. Desde o jeitinho do seu rosto com esse maxilar lindão, o sorriso bobo, até o corpo todo que parece feito só pra me deixar louco e apaixonado.
+
+Mas, mais que isso, você é engraçada… irritantemente engraçada. Eu te amo, mas você é difícil, às vezes tu faz umas piadas engraçadas mas eu não fico rindo para mostrar que eu sou sério 😐. Você me tira do sério de um jeito que só você sabe. E o pior é que eu deixo.
+
+Porque se eu bater o pé no chão, se eu cair da bicicleta, ou fizer qualquer coisa que te dê motivo pra ficar enchendo meu saco e rindo de mim, eu prefiro ficar quieto, porque eu não mereço ser zoado pelo resto do dia. Aliás, essas coisas acontecem todos os dias, mas não falo nada se não tu vai lembrar disso pelo resto do ano.
+
+Você me faz bem até quando me irrita. Quando fica me cutucando, me aperta, me provoca. Parece que gosta de me irritar. Mas no fundo, cada coisinha sua é só mais uma parte do pacote que eu escolhi amar. Com todas as zoeiras, risadinhas, piadinhas sem graça e até com essa carinha de “anjinho” que você faz quando quer se safar. Pior que você faz uma cara que parece que até eu que estou errado, aí eu começo a sentir dó.
+
+Se quiser mais mensagens assim, vai ter que me encher de beijos como pagamento.
+
+Te amo, minha princesa. Você foi o meu melhor investimento, e farei de tudo pra a gente viver felizes para sempre, igualzinho nos desenhos da Disney.`
+    };
+
+    const musicas = [
+      "https://www.bensound.com/bensound-music/bensound-romantic.mp3",
+      "https://www.bensound.com/bensound-music/bensound-love.mp3"
+    ];
+
+    function mostrarMensagem() {
+      const hoje = new Date();
+      const dataFormatada = hoje.toISOString().slice(5, 10);
+      const msg = mensagens[dataFormatada] || "Já já eu atualizo meu anjo, te amo muito minha princesa.";
+
+      document.getElementById("mensagem").innerText = msg;
+      document.getElementById("mensagem").style.display = "block";
+
+      if (dataFormatada === "05-06") {
+        document.getElementById("final").innerText = "Fim da missão: conquistar a Isadora. Resultado: SUCESSO ABSOLUTO!";
+        document.getElementById("final").style.display = "block";
+      }
+    }
+
+    function trocarMusica(indice) {
+      const musica = document.getElementById("musica");
+      const source = document.getElementById("musicaSource");
+      source.src = musicas[indice];
+      musica.load();
+      musica.play();
+    }
+  </script>
+</body>
+</html>
